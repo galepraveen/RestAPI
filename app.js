@@ -1,6 +1,9 @@
 const express = require('express');
-const { ProductsTesting } = require('./controllers/products');
 const app = express();
+
+// requring database
+const connectDB = require('./database/connect_database');
+// requiring routes
 const products_routes = require('./routes/products')
 
 const PORT = process.env.PORT || 5000;
@@ -10,11 +13,13 @@ app.get('/', (req, resp) => {
     resp.send('Hello World');
 })
 
+// creating middleware to the routes
 app.use('/api', products_routes);
 
 // listening to the request
-async function starter(){
+const starter = async function(){
     try{
+        await connectDB();
         app.listen(PORT,'localhost',()=>{
             console.log(`connected to port: ${PORT}`);
         });

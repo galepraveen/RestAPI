@@ -4,6 +4,12 @@ const Products = async (req, resp)=>{
         productName: "Lenovo IdeaPad 3",
         type: "Normal"
     })
+
+    // resp.send({
+    //     id: 1,
+    //     productName: "Lenovo IdeaPad 3",
+    //     type: "Normal"
+    // })
 }
 
 const ProductsTesting = async (req, resp) => {
