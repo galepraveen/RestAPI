@@ -1,0 +1,20 @@
+[
+    {
+        "name": "lenovo ideapad 3",
+        "price": 154,
+        "featured": true,
+        "company": "Lenovo"
+    },
+    {
+        "name": "asus max pro m1",
+        "price": 50,
+        "featured": true,
+        "company": "Asus"
+    },
+    {
+        "name": "redmi k20 pro",
+        "price": 98,
+        "featured": true,
+        "company": "Redmi"
+    }
+]
