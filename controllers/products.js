@@ -56,6 +56,8 @@ const ProductsTesting = async (req, resp) => {
     pageSkip = (page-1)*limit;
 
     let apiData = ProductModel.find(req.query);
+
+    // the below methods are from mongoose
     apiData.skip(pageSkip).limit(limit);
 
 
