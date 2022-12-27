@@ -44,25 +44,26 @@ const Products = async (req, resp)=>{
 }
 
 const ProductsTesting = async (req, resp) => {
-    console.log(req.query);
 
     // to divide the number of pages
     page = Number(req.query.page) || 1;
 
     // to set the limit of products in each page
-    limit = Number(req.query.limit) || 1;
+    limit = Number(req.query.limit) || 5;
 
     // formula for the page skip
     pageSkip = (page-1)*limit;
 
-    let apiData = ProductModel.find(req.query);
+    let productData = await ProductModel.find(req.query).skip(pageSkip).limit(limit);
 
-    // the below methods are from mongoose
-    apiData.skip(pageSkip).limit(limit);
-
-
-    const productData = await apiData;
     resp.status(200).json(productData);
+
+    // // the below methods are from mongoose
+    // apiData.skip(pageSkip).limit(limit);
+
+    // const productData = await apiData;
+    // console.log(productData);
+    // resp.status(200).json(productData);
 }
 
 module.exports = {Products, ProductsTesting}; 
