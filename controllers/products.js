@@ -2,7 +2,7 @@ const { mapReduce } = require('../models/ProductSchema');
 const ProductModel = require('../models/ProductSchema');
 
 const Products = async (req, resp)=>{
-    const { name, price, company, featured, sort } = req.query;
+    const { name, price, company, featured, sort, select } = req.query;
     
     const queryObject = {};
 
@@ -25,22 +25,42 @@ const Products = async (req, resp)=>{
         let sortFix = sort.replace(',', ' ');
         apiData = apiData.sort(sortFix);
     }
+
+    // similar to sort, doing the task with select so that user can see the desired properties of each product
+    if(select){
+        let selectFix = select.split(',').join(" ");
+        apiData = apiData.select(selectFix);
+    }
+
+
     
     // to fetch data from mongodb atlas and view in our page
     // const ProductsData = await ProductModel.find({});
 
     // to fetch the data based on users interest
     const ProductsData = await apiData;
-    console.log(ProductsData);
+    // console.log(ProductsData);
     resp.status(200).json(ProductsData);
 }
 
 const ProductsTesting = async (req, resp) => {
-    resp.status(200).json({
-        id: 1,
-        productName: "Lenovo IdeaPad 3",
-        type: "Testing"
-    })
+    console.log(req.query);
+
+    // to divide the number of pages
+    page = Number(req.query.page) || 1;
+
+    // to set the limit of products in each page
+    limit = Number(req.query.limit) || 1;
+
+    // formula for the page skip
+    pageSkip = (page-1)*limit;
+
+    let apiData = ProductModel.find(req.query);
+    apiData.skip(pageSkip).limit(limit);
+
+
+    const productData = await apiData;
+    resp.status(200).json(productData);
 }
 
 module.exports = {Products, ProductsTesting}; 
