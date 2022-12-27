@@ -1,14 +1,8 @@
 const { mapReduce } = require('../models/ProductSchema');
 const ProductModel = require('../models/ProductSchema');
 
-const matchRegex = (obj, property)=>{
-    if(property){
-        obj.property = { $regex: property, $options: 'i'};
-    }
-}
-
 const Products = async (req, resp)=>{
-    const { name, price, company, featured } = req.query;
+    const { name, price, company, featured, sort } = req.query;
     
     const queryObject = {};
 
@@ -23,13 +17,20 @@ const Products = async (req, resp)=>{
         queryObject.featured = { $regex: featured, $options: 'i'};
     }
 
-    
+    // the data is separated from its original position because for the implementation of the sort function
+    let apiData = ProductModel.find(queryObject);
 
+    // since in the user query the sorting is done in terms of ',' , to convert it into mongodb sort function convention, the below work is done
+    if(sort){
+        let sortFix = sort.replace(',', ' ');
+        apiData = apiData.sort(sortFix);
+    }
+    
     // to fetch data from mongodb atlas and view in our page
     // const ProductsData = await ProductModel.find({});
 
     // to fetch the data based on users interest
-    const ProductsData = await ProductModel.find(queryObject);
+    const ProductsData = await apiData;
     console.log(ProductsData);
     resp.status(200).json(ProductsData);
 }
