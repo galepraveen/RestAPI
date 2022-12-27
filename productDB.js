@@ -8,6 +8,10 @@ require('dotenv').config();
 const starter = async ()=>{
     try{
         await connectDB(process.env.MONGODB_URL);
+
+        // to avoid the duplication of data in mongodb atlas
+        await productModel.deleteMany();
+        
         await productModel.create(productJson);
         console.log("connected");
     }catch(ex){
